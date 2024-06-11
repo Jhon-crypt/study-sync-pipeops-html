@@ -9,7 +9,7 @@ export default function ModulesPlanCards() {
             <div class="position-relative">
 
                 <div class="position-absolute top-10 start-0">
-                    <br /><br /><br />
+                    <br />
                     <img src="/vector1.png" />
                 </div>
             </div>
@@ -47,9 +47,7 @@ export default function ModulesPlanCards() {
                                         </ul>
                                     </div>
                                 </div>
-                                <div className="col">
-                                    <span class="badge rounded-pill text-bg-success" style={{ fontSize: "8px" }}>100l</span>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>

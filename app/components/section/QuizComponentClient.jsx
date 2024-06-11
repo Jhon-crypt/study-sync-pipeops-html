@@ -4,6 +4,8 @@ import { Transition } from 'react-transition-group';
 import Modal from 'react-modal';
 import QuizCalculator from '../cards/quizCalculator.jsx';
 import './quiz.css'
+import { IoIosCloseCircleOutline } from "react-icons/io";
+
 
 const QuizComponentClient = ({ quiz }) => {
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -67,7 +69,7 @@ const QuizComponentClient = ({ quiz }) => {
 
   return (
     <section className="container w-100">
-     
+
       <div className="questionBox w-100" id="app">
         <Transition
           duration={{ enter: 500, leave: 300 }}
@@ -78,16 +80,16 @@ const QuizComponentClient = ({ quiz }) => {
           {questionIndex < quiz.questions.length ? (
             <div className="questionContainer">
               <header>
-              <div className="progressContainer mb-2">
-                <progress className="progress col-12 is-small" style={{ height: "10px" }} value={(questionIndex / quiz.questions.length) * 100} max="100">
-                  {(questionIndex / quiz.questions.length) * 100}%
-                </progress>
-                <p className='my-3' style={{fontWeight: '600'}}>QUESTION {questionIndex + 1}/{quiz.questions.length}</p>
-              </div>
+                <div className="progressContainer mb-2">
+                  <progress className="progress col-12 is-small" style={{ height: "5px" }} value={(questionIndex / quiz.questions.length) * 100} max="100">
+                    {(questionIndex / quiz.questions.length) * 100}%
+                  </progress>
+                  <p className='my-3 text-muted' style={{ fontWeight: '500' }}>QUESTION {questionIndex + 1}/{quiz.questions.length}</p>
+                </div>
 
 
               </header>
-              <h2 className="titleContainer title">{quiz.questions[questionIndex].text}</h2>
+              <h5 className="titleContainer title mb-4" style={{ fontFamily: "Fredoka, sans-serif", fontWeight: "500", color: "#333333" }}>{quiz.questions[questionIndex].text}</h5>
               <div className="optionContainer">
                 {quiz.questions[questionIndex].responses.map((response, index) => (
                   <div
@@ -96,11 +98,12 @@ const QuizComponentClient = ({ quiz }) => {
                     key={index}
 
                     style={{
-                      backgroundColor: userResponses[questionIndex] === index ? '#DBC7CF' : '#FFF',
+                      backgroundColor: userResponses[questionIndex] === index ? '#DBC7CF' : 'transparent',
                       borderRadius: '0.5rem',
                       marginBottom: '1rem',
                       padding: '0.6rem',
-                      color: '#C9638A', fontWeight: '800'
+                      color: '#C9638A', fontWeight: '800',
+                      border: '1px solid #D1C8D0'
                     }}
                   >
                     {String.fromCharCode(97 + index)}. {response.text}
@@ -137,8 +140,8 @@ const QuizComponentClient = ({ quiz }) => {
           contentLabel="Quiz Score"
           style={{
             content: {
-              width: '70%',
-              height: '60%',
+              width: '80%',
+              height: '50%',
               top: '50%',
               left: '50%',
               display: 'flex',
@@ -152,19 +155,21 @@ const QuizComponentClient = ({ quiz }) => {
           }}
         >
           {/* <h2>Quiz Score</h2> */}
-          
-        
+          <div className='ms-5'>
+            <div className='position-absolute top-0 end-0'>
+              <IoIosCloseCircleOutline size={20} onClick={closeModal}/>
+            </div>
+          </div>
           <div className='scoreImg'>
           </div>
-          
-          <h1 style={{color: '#CB5284', fontWeight: '900', fontSize: '25px'}}>{score()} / {quiz.questions.length}</h1>
+
+          <h1 style={{ color: '#CB5284', fontWeight: '900', fontSize: '25px' }}>{score()} / {quiz.questions.length}</h1>
           <button className="button btn px-5 text-white" onClick={handleQuizCompletion} style={{ background: 'linear-gradient(to right, #CB5284, #754968)' }}>Review</button>
-          <button className="button btn px-5 text-white"  onClick={closeModal}  style={{ background: 'linear-gradient(to right, #CB5284, #754968)' }}>Close</button>
         </Modal>
         {showReview && (
           <div className="modal reviewQuestions container p-3" style={{ display: 'block' }}>
             <div className="modal-content container pb-4">
-              <span className="close" style={{float: 'right', width: '100%'}} onClick={() => setShowReview(false)}>&times;</span>
+              <span className="close" style={{ float: 'right', width: '100%' }} onClick={() => setShowReview(false)}>&times;</span>
               <h2 className='text-center py-4'>Review Questions</h2>
               {quiz.questions.map((question, index) => (
                 <div key={index}>
@@ -184,17 +189,16 @@ const QuizComponentClient = ({ quiz }) => {
           contentLabel="Calculator"
           style={{
             content: {
-              padding : '0px',
+              padding: '0px',
               margin: '0px',
               height: '100%',
-              
-              
+              width: '',
               borderRadius: '15px'
             },
           }}
         >
           <div className="calculatorModalContent p-0 m-0">
-           
+
             {/* Add your calculator component here */}
             <QuizCalculator />
             {/* <div className='w-100 text-center mt-2'>
