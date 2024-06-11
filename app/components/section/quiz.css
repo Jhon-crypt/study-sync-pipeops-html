@@ -1,0 +1,15 @@
+.button:hover {
+    background: linear-gradient(to right, #754968, #CB5284);
+    transition: all 0.5s ease-in-out;
+  }
+
+  progress::-webkit-progress-value {
+    background-color: #E84D88;
+  }
+  .scoreImg{
+    background-image: url('/quiz_img/score_emoji.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    width: 130px;
+    height: 130px;
+  }
