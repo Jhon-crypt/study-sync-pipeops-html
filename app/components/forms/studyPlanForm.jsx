@@ -81,7 +81,7 @@ export default function StudyPlanForm() {
             </div>
 
             <div className="mt-5 mb-3 d-grid">
-                <Link href="/setup" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }}>
+                <Link href="/study-plan/" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }}>
                     Upload Note
                 </Link>
             </div>

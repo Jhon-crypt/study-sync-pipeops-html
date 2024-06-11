@@ -1,5 +1,6 @@
 import GpaTable from "../table/gpaTable"
 import SaveGpaModal from "../modal/saveGpaModal"
+import Link from "next/link"
 
 export default function GpaCalculatorSection() {
 
@@ -37,6 +38,10 @@ export default function GpaCalculatorSection() {
                         <button href="/setup" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }} data-bs-toggle="modal" data-bs-target="#saveGpaModal">
                             Save
                         </button>
+
+                        <Link href="/gpa/savedGpa" className="btn btn-block px-5 py-2 mt-2 mb-3" style={{ fontFamily: "Fredoka, sans-serif", border: "1px solid #DC5489" }}>
+                            View Saved GPAs
+                        </Link>
                     </div>
 
                 </div>

@@ -13,7 +13,7 @@ export default function Dashboard() {
             <main style={{ height: "100%" }}>
                 <div className="container px-3 mt-2">
                     <header>
-                        <p style={{ fontFamily: "Fredoka, sans-serif", fontWeight: "500", fontSize: "17px" }} >Hi, Islamiyat Yusuf</p>
+                        <p style={{ fontFamily: "Fredoka, sans-serif", fontWeight: "500", fontSize: "17px" }} >Hi, Mariam Motunrayo </p>
                         <p className="d-flex" style={{ fontFamily: "Fredoka, sans-serif", }}>
                             <span className="me-4">Welcome</span>
                             <span>

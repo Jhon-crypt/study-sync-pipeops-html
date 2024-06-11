@@ -67,10 +67,7 @@ const QuizComponentClient = ({ quiz }) => {
 
   return (
     <section className="container w-100">
-      <div className='my-4' style={{display: 'flex', justifyContent: 'end', alignItems: 'end', width: '100%'}}>
-
-        <button className="calculatorButton text-white px-3 btn"  onClick={handleOpenCalculator} style={{background: 'linear-gradient(to right, #CB5284, #754968)'}}>Calculator</button>
-      </div>
+     
       <div className="questionBox w-100" id="app">
         <Transition
           duration={{ enter: 500, leave: 300 }}
@@ -82,7 +79,7 @@ const QuizComponentClient = ({ quiz }) => {
             <div className="questionContainer">
               <header>
               <div className="progressContainer mb-2">
-                <progress className="progress col-12 is-small" style={{  }} value={(questionIndex / quiz.questions.length) * 100} max="100">
+                <progress className="progress col-12 is-small" style={{ height: "10px" }} value={(questionIndex / quiz.questions.length) * 100} max="100">
                   {(questionIndex / quiz.questions.length) * 100}%
                 </progress>
                 <p className='my-3' style={{fontWeight: '600'}}>QUESTION {questionIndex + 1}/{quiz.questions.length}</p>

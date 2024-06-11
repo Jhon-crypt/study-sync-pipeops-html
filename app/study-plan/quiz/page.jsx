@@ -7,7 +7,7 @@ export default function Quiz() {
 
         <>
 
-            <Header title="Quiz" icon="bi-chevron-left" route="/dashboard" />
+            <Header title="Quiz" icon="bi-chevron-left" route="/study-plan/notes" />
 
             <QuizSection />
         </>

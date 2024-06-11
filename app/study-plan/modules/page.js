@@ -7,7 +7,7 @@ export default function Modules() {
 
         <>
 
-            <Header title="Modules" icon="bi-chevron-left" route="/dashboard" />
+            <Header title="Modules" icon="bi-chevron-left" route="/study-plan" />
 
             <ModulesSection />
         </>
