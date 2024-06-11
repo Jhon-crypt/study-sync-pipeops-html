@@ -1,0 +1,30 @@
+.tab-switch {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.toggle-switch {
+  display: flex;
+  border-radius: 25px;
+  padding: px;
+  border: 1px solid #674764;
+  width: fit-content;
+}
+
+.tab {
+  border: none;
+  padding: 0px 20px;
+  background: none;
+  cursor: pointer;
+  border-radius: 25px;
+  font-size: 16px;
+  outline: none;
+}
+
+.tab.active {
+  background-color: #674764;
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
