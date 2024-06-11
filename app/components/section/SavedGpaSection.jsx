@@ -14,6 +14,12 @@ export default function SavedGpaSection() {
                         <div className="col mb-3">
                             <SavedGpaCard />
                         </div>
+                        <div className="col mb-3">
+                            <SavedGpaCard />
+                        </div> 
+                        <div className="col mb-3">
+                            <SavedGpaCard />
+                        </div>
                     </div>
 
                 </div>

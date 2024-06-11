@@ -72,21 +72,7 @@ export default function Dashboard() {
                         </div>
                         <hr />
 
-                        <div className="mt-2 px-2">
-                            <div className="d-flex justify-content-between">
-                                <p className="d-flex">
-                                    <span className="me-2"><i className="bi bi-view-list" /></span>
-                                    <span style={{ fontFamily: "Fredoka, sans-serif", }}>To-Do</span>
-                                </p>
-                                <p style={{ fontFamily: "Fredoka, sans-serif" }}>
-                                    5/12
-                                </p>
-                            </div>
-                            <div class="progress" role="progressbar" aria-label="Example 1px high" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style={{ "height": "5px" }}>
-                                <div class="progress-bar" style={{ "width": "40%", backgroundColor: "#D9455F" }}></div>
-                            </div>
-                        </div>
-                        <hr />
+                        
 
                         <p className="d-flex mt-4" style={{ fontFamily: "Fredoka, sans-serif", fontWeight: "500", fontSize: "17px" }}>
                             <span><i className="bi bi-award me-2" /></span>

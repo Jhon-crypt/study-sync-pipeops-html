@@ -5,7 +5,7 @@ import Modal from 'react-modal';
 import QuizCalculator from '../cards/quizCalculator.jsx';
 import './quiz.css'
 import { IoIosCloseCircleOutline } from "react-icons/io";
-
+import Link from 'next/link';
 
 const QuizComponentClient = ({ quiz }) => {
   const [questionIndex, setQuestionIndex] = useState(0);
@@ -102,8 +102,10 @@ const QuizComponentClient = ({ quiz }) => {
                       borderRadius: '0.5rem',
                       marginBottom: '1rem',
                       padding: '0.6rem',
-                      color: '#C9638A', fontWeight: '800',
-                      border: '1px solid #D1C8D0'
+                      color: '#CB5284',
+                      border: '1px solid #D1C8D0',
+                      fontFamily: 'Fredoka, sans-serif',
+                      fontWeight: '600'
                     }}
                   >
                     {String.fromCharCode(97 + index)}. {response.text}
@@ -164,7 +166,7 @@ const QuizComponentClient = ({ quiz }) => {
           </div>
 
           <h1 style={{ color: '#CB5284', fontWeight: '900', fontSize: '25px' }}>{score()} / {quiz.questions.length}</h1>
-          <button className="button btn px-5 text-white" onClick={handleQuizCompletion} style={{ background: 'linear-gradient(to right, #CB5284, #754968)' }}>Review</button>
+          <Link href="/study-plan/quiz/result" className="button btn px-5 text-white" style={{ background: 'linear-gradient(to right, #CB5284, #754968)' }}>Review</Link>
         </Modal>
         {showReview && (
           <div className="modal reviewQuestions container p-3" style={{ display: 'block' }}>

@@ -9,7 +9,7 @@ export default function Results(){
 
            
 
-                <Header title="Result" icon="bi-chevron-left" route="/dashboard" />
+                <Header title="Results" icon="bi-chevron-left" route="/study-plan/quiz" />
 
                 <ResultSection />
            

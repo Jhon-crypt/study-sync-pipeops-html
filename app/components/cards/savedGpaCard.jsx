@@ -6,7 +6,7 @@ export default function SavedGpaCard() {
 
         <>
 
-            <Link href="/" className="text-decoration-none card bg-transparent" style={{ border: "1px solid #E0D9DE" }}>
+            <Link href="/gpa" className="text-decoration-none card bg-transparent" style={{ border: "1px solid #E0D9DE" }}>
                 <div className="card-body pt-0 px-2">
                     <div className="d-flex justify-content-between">
                         <div className="d-flex align-items-center me-3">
