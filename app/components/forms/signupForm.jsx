@@ -1,30 +1,87 @@
-import Link from "next/link"
+"use client"
+import { useState } from "react"
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
 
 export default function SignupForm() {
+
+    const [loading, setLoading] = useState(false)
+
+    const [formData, setFormData] = useState({
+        fullname: '',
+        email: '',
+        password: '',
+        ConfirmPassword: '',
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        setLoading(true)
+        e.preventDefault();
+
+        if (formData.password !== formData.ConfirmPassword) {
+            setLoading(true)
+            toast.error("Passwords do not match", {
+                position: "top-right"
+            });
+        } else {
+            setLoading(true)
+            const data = new FormData();
+            data.append('fullname', formData.fullname);
+            data.append('email', formData.email);
+            data.append('password', formData.password);
+
+            // Check if form data exists in localStorage
+            const storedData = localStorage.getItem('formData');
+
+            if (storedData) {
+                localStorage.removeItem('formData');
+                toast.error("Already exists, deleted", {
+                    position: "top-right"
+                });
+            } else {
+                localStorage.setItem('formData', JSON.stringify(formData));
+                toast.success("Saved", {
+                    position: "top-right"
+                });
+            }
+        }
+
+    }
+
+
+
 
     return (
 
         <>
 
-            <form>
+            <form onSubmit={handleSubmit}>
                 <div class="mb-4">
                     <label class="form-label" style={{ fontSize: "16px", fontFamily: "Fredoka, sans-serif", fontWeight: '500' }}>Full Name</label>
-                    <input type="text" placeholder="e.g Islamiyat Yusuf" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" style={{ backgroundColor: "#F7F2F6", height: "44px", borderRadius: "10px" }} />
+                    <input name="fullname" value={formData.fullname} onChange={handleChange} type="text" placeholder="e.g Islamiyat Yusuf" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" style={{ backgroundColor: "#F7F2F6", height: "44px", borderRadius: "10px" }} required />
                 </div>
 
                 <div class="mb-4">
                     <label class="form-label" style={{ fontSize: "16px", fontFamily: "Fredoka, sans-serif", fontWeight: '500' }}>Email Address</label>
-                    <input type="text" placeholder="e.g Islamiyatyusuf@gmail.com" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" style={{ backgroundColor: "#F7F2F6", height: "44px", borderRadius: "10px" }} />
+                    <input type="email" name="email" value={formData.email} onChange={handleChange} placeholder="e.g Islamiyatyusuf@gmail.com" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" style={{ backgroundColor: "#F7F2F6", height: "44px", borderRadius: "10px" }} required />
                 </div>
 
                 <div class="mb-4">
                     <label class="form-label" style={{ fontSize: "16px", fontFamily: "Fredoka, sans-serif", fontWeight: '500' }}>Password</label>
-                    <input type="password" placeholder="e.g Isila25@" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" style={{ backgroundColor: "#F7F2F6", height: "44px", borderRadius: "10px" }} />
+                    <input type="password" name="password" value={formData.password} onChange={handleChange} required placeholder="e.g Isila25@" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" style={{ backgroundColor: "#F7F2F6", height: "44px", borderRadius: "10px" }} />
                 </div>
 
                 <div class="mb-4">
                     <label class="form-label" style={{ fontSize: "16px", fontFamily: "Fredoka, sans-serif", fontWeight: '500' }}>Confirm Password</label>
-                    <input type="password" placeholder="e.g Isila25@" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" style={{ backgroundColor: "#F7F2F6", height: "44px", borderRadius: "10px" }} />
+                    <input type="password" name="ConfirmPassword" value={formData.ConfirmPassword} onChange={handleChange} required placeholder="e.g Isila25@" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" style={{ backgroundColor: "#F7F2F6", height: "44px", borderRadius: "10px" }} />
                 </div>
 
                 <div className="mt-3 px-3">
@@ -34,12 +91,12 @@ export default function SignupForm() {
                 </div>
 
                 <div className="mt-5 mb-3 d-grid">
-                    <Link href="/setup" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }}>
+                    <button type="submit" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }}>
                         Next
-                    </Link>
+                    </button>
                 </div>
             </form>
-
+            <ToastContainer style={{ wdith: "50px" }} />
         </>
 
     )

@@ -82,9 +82,6 @@ export default function AnalyticsSection() {
                 </div>
             </main>
 
-
-
-
         </>
 
     )
