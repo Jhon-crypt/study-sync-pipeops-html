@@ -48,13 +48,7 @@ export default function SignupForm() {
                 localStorage.setItem('formData', JSON.stringify(formData));
                 router.push('/setup')
                 setLoading(false)
-                // Delay to simulate loading
-                /*
-                setTimeout(() => {
-                    setLoading(false);
-                    console.log('saved');
-                }, 5000);
-                */
+                
             } else {
                 localStorage.setItem('formData', JSON.stringify(formData));
                 toast.success("Saved", {
@@ -62,13 +56,7 @@ export default function SignupForm() {
                 });
                 setLoading(false)
                 router.push('/setup')
-                // Delay to simulate loading
-                /*
-                setTimeout(() => {
-                    setLoading(false);
-                    console.log('saved');
-                }, 5000);
-                */
+               
 
             }
         }
