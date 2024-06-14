@@ -2,6 +2,7 @@
 import { useState } from "react"
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from 'next/navigation'
 
 export default function SignupForm() {
 
@@ -13,6 +14,9 @@ export default function SignupForm() {
         password: '',
         ConfirmPassword: '',
     });
+
+    const router = useRouter()
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -27,30 +31,45 @@ export default function SignupForm() {
         e.preventDefault();
 
         if (formData.password !== formData.ConfirmPassword) {
-            setLoading(true)
             toast.error("Passwords do not match", {
                 position: "top-right"
             });
         } else {
-            setLoading(true)
             const data = new FormData();
             data.append('fullname', formData.fullname);
             data.append('email', formData.email);
             data.append('password', formData.password);
-
+            //console.log(formData)
             // Check if form data exists in localStorage
             const storedData = localStorage.getItem('formData');
 
             if (storedData) {
                 localStorage.removeItem('formData');
-                toast.error("Already exists, deleted", {
-                    position: "top-right"
-                });
+                localStorage.setItem('formData', JSON.stringify(formData));
+                router.push('/setup')
+                setLoading(false)
+                // Delay to simulate loading
+                /*
+                setTimeout(() => {
+                    setLoading(false);
+                    console.log('saved');
+                }, 5000);
+                */
             } else {
                 localStorage.setItem('formData', JSON.stringify(formData));
                 toast.success("Saved", {
                     position: "top-right"
                 });
+                setLoading(false)
+                router.push('/setup')
+                // Delay to simulate loading
+                /*
+                setTimeout(() => {
+                    setLoading(false);
+                    console.log('saved');
+                }, 5000);
+                */
+
             }
         }
 
@@ -91,9 +110,22 @@ export default function SignupForm() {
                 </div>
 
                 <div className="mt-5 mb-3 d-grid">
-                    <button type="submit" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }}>
-                        Next
-                    </button>
+                    {loading ? (
+                        <>
+                            <button disabled type="submit" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }}>
+                                Loading
+                            </button>
+                        </>
+                    ) :
+                        (
+                            <>
+                                <button type="submit" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }}>
+                                    Next
+                                </button>
+                            </>
+                        )
+                    }
+
                 </div>
             </form>
             <ToastContainer style={{ wdith: "50px" }} />
