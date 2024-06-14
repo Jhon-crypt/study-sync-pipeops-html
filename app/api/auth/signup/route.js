@@ -19,11 +19,15 @@ export async function POST(req) {
     // Check if the Bearer token matches the expected value from the environment variables
     if (bearer_token === process.env.MASTER_BEARER_KEY) {
 
-
-
         const json = await req.json();
 
-        const signup_data= {
+
+        // Ensure required fields exist in the JSON data
+        if (!json.fullname || !json.email || !json.password || !json.country || !json.gender || !json.institution || !json.gradePoint) {
+            return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+        }
+
+        const signup_data = {
             fullanme: json.email,
             email: json.email,
             password: json.password,
