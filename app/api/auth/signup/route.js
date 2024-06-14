@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { headers } from 'next/headers';
 import bcrypt from "bcrypt";
-
+import supabase from "@/app/config/supabase";
 
 export async function POST(req) {
 
@@ -42,9 +42,10 @@ export async function POST(req) {
         const saltRounds = 10;
         const hash = bcrypt.hashSync(signup_data.password, saltRounds);
 
-        console.log(hash)
+        //store data in supabase
+        console.log(supabase)
         return NextResponse.json({ message: signup_data });
-
+        
     }
 
 }
