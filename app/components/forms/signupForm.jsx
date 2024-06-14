@@ -51,7 +51,7 @@ export default function SignupForm() {
                 
             } else {
                 localStorage.setItem('formData', JSON.stringify(formData));
-                toast.success("Saved", {
+                toast.success("Form Saved", {
                     position: "top-right"
                 });
                 setLoading(false)
