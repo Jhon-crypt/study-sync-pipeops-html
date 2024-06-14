@@ -1,6 +1,17 @@
+"use client"
+import { useState } from "react"
+import { toast, ToastContainer } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from 'next/navigation'
+
 import Link from "next/link"
 
+
 export default function SetupForm() {
+
+    const [loading, setLoading] = useState(false)
+
+    const router = useRouter()
 
     return (
 
