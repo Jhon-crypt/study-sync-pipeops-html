@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { headers } from 'next/headers';
+import bcrypt from "bcrypt";
 
 
 export async function POST(req) {
@@ -28,7 +29,7 @@ export async function POST(req) {
         }
 
         const signup_data = {
-            fullanme: json.email,
+            fullanme: json.fullname,
             email: json.email,
             password: json.password,
             country: json.country,
@@ -37,6 +38,11 @@ export async function POST(req) {
             gradePoint: json.gradePoint
         }
 
+        //Hashing password
+        const saltRounds = 10;
+        const hash = bcrypt.hashSync(signup_data.password, saltRounds);
+
+        console.log(hash)
         return NextResponse.json({ message: signup_data });
 
     }
