@@ -24,6 +24,7 @@ export default function SignupForm() {
             ...prevData,
             [name]: value,
         }));
+        
     };
 
     const handleSubmit = async (e) => {
