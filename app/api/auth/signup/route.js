@@ -47,9 +47,9 @@ export async function POST(req) {
         const { data } = await supabase
             .from('users')
             .select('*')
-            .eq('email', `${signup_data.email}`)
+            .eq('email', signup_data.email)
 
-        if (data) {
+        if (data.length > 0) {
 
             return NextResponse.json({ message: "Email already exist" }, { status: 500 });
 
