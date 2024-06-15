@@ -28,7 +28,7 @@ export default function SetupForm() {
 
     const router = useRouter()
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         setLoading(true)
         e.preventDefault();
         console.log(additionalData)
@@ -41,10 +41,6 @@ export default function SetupForm() {
 
         // Merge the additional data with the existing form data
         const updatedFormData = { ...existingFormData, ...additionalData };
-        toast.success("Sign up successful", {
-            position: "top-right"
-        });
-        setLoading(false)
         // Save the updated form data back to localStorage
         localStorage.setItem('formData', JSON.stringify(updatedFormData));
 
@@ -59,6 +55,41 @@ export default function SetupForm() {
         }
 
         console.log(payload)
+
+        try{
+
+            const BearerToken = process.env.NEXT_PUBLIC_MASTER_BEARER_KE;
+
+            const response = await fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${BearerToken}`
+                },
+                body: JSON.stringify(payload)
+            });
+            if (!response.ok) {
+                console.log(error)
+                toast.error("Email already exists", {
+                    position: "top-right"
+                });
+                setLoading(false)
+            } else {
+                const data = await response.json();
+                toast.success("Sign up successful", {
+                    position: "top-right"
+                });
+                setLoading(false)
+                console.log(data)
+            }
+
+        }catch(error){
+            setLoading(false)
+            toast.error("Email already exists", {
+                position: "top-right"
+            });
+            console.log(error)
+        }
 
     };
 
