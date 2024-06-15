@@ -24,6 +24,19 @@ export async function POST(req) {
 
         const json = await req.json();
 
+        // Ensure required fields exist in the JSON data
+        if (!json.email || !json.password) {
+            return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+        }
+
+        const signin_data = {
+            email: json.email,
+            password: json.password,
+        };
+
+        
+
+        /*
         const base64Data = json.image; // Assuming the base64 image is in json.image
 
         const base64String = base64Data.replace(/^data:image\/\w+;base64,/, "");
@@ -36,6 +49,7 @@ export async function POST(req) {
 
         // Write the file
         await writeFile(filePath, buffer);
+        */
 
         return NextResponse.json({ message: "Image saved successfully" });
 
