@@ -85,13 +85,7 @@ export async function POST(req) {
                 }
             }
 
-            /*
-            async function SendVerificationMail(){
-            
-            
-            
-            }
-            */
+           
 
             return await InsertUserDataIntoDb(signup_data.email, hash);
 
