@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { headers } from 'next/headers';
 import bcrypt from "bcrypt";
+import { cookies } from 'next/headers'
 //import { writeFile } from 'fs/promises'; // Use promises for async/await
 import supabase from "@/app/config/supabase";
 
@@ -21,7 +22,6 @@ export async function POST(req) {
 
     // Check if the Bearer token matches the expected value from the environment variables
     if (bearer_token === process.env.MASTER_BEARER_KEY) {
-
 
 
         const json = await req.json();
@@ -49,12 +49,16 @@ export async function POST(req) {
 
             const user = data;
 
-            //return NextResponse.json({ message: user }, { status: 200 });
-
-
-            if(bcrypt.compareSync(signin_data.password, user.password) == true){
+            if (bcrypt.compareSync(signin_data.password, user.password) == true) {
+                const encryptedSessionData = 12345; // Encrypt your session data
+                cookies().set('session', encryptedSessionData, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    maxAge: 5, // 5 seconds
+                    path: '/',
+                });
                 return NextResponse.json({ message: "User Logged in" }, { status: 200 });
-            }else{
+            } else {
                 return NextResponse.json({ message: "User Not Found" }, { status: 500 });
             }
 

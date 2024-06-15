@@ -92,6 +92,6 @@ export async function POST(req) {
         }
     } else {
         // Return a 403 response if the bearer token does not match
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
+        return NextResponse.json({ message: 'Unauthorized' }, { status: 403 });
     }
 }
