@@ -78,6 +78,7 @@ export async function POST(req) {
                     if (error) {
                         return NextResponse.json({ message: error }, { status: 500 });
                     } else {
+                        await InsertConfirmationCodeToDb(user_id)
                         return NextResponse.json({ message: "Account Created" }, { status: 201 });
                     }
                 } catch (error) {
@@ -97,20 +98,18 @@ export async function POST(req) {
                 const randomCode = generateRandomCode();
 
                 const { error } = await supabase
-                    .from("users")
+                    .from("confirmation_code")
                     .insert({
                         "user_id": user_id,
-                        "email": email,
-                        "password": password,
-                        "role": "user",
-                        "status": "pending",
-                        "sub_status": "free",
+                        "code": randomCode,
+                        "status": "Active"
                     });
 
                 if(error){
-                    
+                    console.error('Error inserting confirmation code:', error);
                 }else {
-                    
+                    console.error('successfully inserted confirmation code');
+
                 }
 
             }
