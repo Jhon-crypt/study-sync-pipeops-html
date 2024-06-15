@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { headers } from 'next/headers';
-import { writeFile } from 'fs/promises'; // Use promises for async/await
+import bcrypt from "bcrypt";
+//import { writeFile } from 'fs/promises'; // Use promises for async/await
+import supabase from "@/app/config/supabase";
 
 
 export async function POST(req) {
@@ -34,7 +36,30 @@ export async function POST(req) {
             password: json.password,
         };
 
-        
+        // Checking if the user exists
+        const { data, error } = await supabase
+            .from('users')
+            .select('email, password')
+            .eq('email', signin_data.email)
+            .single();
+
+        if (error) {
+            return NextResponse.json({ message: 'User not found' }, { status: 404 });
+        } else {
+
+            const user = data;
+
+            //return NextResponse.json({ message: user }, { status: 200 });
+
+
+            if(bcrypt.compareSync(signin_data.password, user.password) == true){
+                return NextResponse.json({ message: "User Logged in" }, { status: 200 });
+            }else{
+                return NextResponse.json({ message: "User Not Found" }, { status: 500 });
+            }
+
+        }
+
 
         /*
         const base64Data = json.image; // Assuming the base64 image is in json.image
@@ -51,7 +76,7 @@ export async function POST(req) {
         await writeFile(filePath, buffer);
         */
 
-        return NextResponse.json({ message: "Image saved successfully" });
+        //return NextResponse.json({ message: "Image saved successfully" });
 
     }
 
