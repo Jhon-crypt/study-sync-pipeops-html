@@ -85,7 +85,35 @@ export async function POST(req) {
                 }
             }
 
-           
+            async function InsertConfirmationCodeToDb(user_id) {
+
+                function generateRandomCode() {
+                    const min = 1000;
+                    const max = 9999;
+                    const code = Math.floor(Math.random() * (max - min + 1)) + min;
+                    return code;
+                }
+
+                const randomCode = generateRandomCode();
+
+                const { error } = await supabase
+                    .from("users")
+                    .insert({
+                        "user_id": user_id,
+                        "email": email,
+                        "password": password,
+                        "role": "user",
+                        "status": "pending",
+                        "sub_status": "free",
+                    });
+
+                if(error){
+                    
+                }else {
+                    
+                }
+
+            }
 
             return await InsertUserDataIntoDb(signup_data.email, hash);
 
