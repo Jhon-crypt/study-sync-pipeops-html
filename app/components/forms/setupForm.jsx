@@ -47,8 +47,21 @@ export default function SetupForm() {
         setLoading(false)
         // Save the updated form data back to localStorage
         localStorage.setItem('formData', JSON.stringify(updatedFormData));
-        console.log("Form data updated:", updatedFormData.email);
+
+        const payload = {
+            fullname: updatedFormData.fullname,
+            email: updatedFormData.email,
+            password: updatedFormData.password,
+            country: updatedFormData.country,
+            gender: updatedFormData.gender,
+            institution: updatedFormData.institution,
+            gradePoint: updatedFormData.gradePoint
+        }
+
+        console.log(payload)
+
     };
+
 
     return (
 
