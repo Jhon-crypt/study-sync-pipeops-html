@@ -43,37 +43,59 @@ export async function POST(req) {
             gradePoint: json.gradePoint
         };
 
-        // Hashing password
-        const saltRounds = 10;
-        const hash = bcrypt.hashSync(signup_data.password, saltRounds);
+        //checking if the email exists
+        const { data } = await supabase
+            .from('users')
+            .select('*')
+            .eq('email', `${signup_data.email}`)
 
-        async function InsertUserDataIntoDb(email, password) {
-            // Generate user id
-            const user_id = uuidv4();
+        if (data) {
 
-            // Store data in supabase
-            try {
-                const { error } = await supabase
-                    .from("users")
-                    .insert({
-                        "user_id": user_id,
-                        "email": email,
-                        "password": password,
-                        "role": "user",
-                        "status": "pending",
-                        "sub_status": "free",
-                    });
-                if (error) {
-                    return NextResponse.json({ message: error }, { status: 500 });
-                } else {
-                    return NextResponse.json({ message: "Account Created" }, { status: 201 });
+            return NextResponse.json({ message: "Email already exist" }, { status: 500 });
+
+        } else {
+
+            // Hashing password
+            const saltRounds = 10;
+            const hash = bcrypt.hashSync(signup_data.password, saltRounds);
+
+            async function InsertUserDataIntoDb(email, password) {
+                // Generate user id
+                const user_id = uuidv4();
+
+                // Store data in supabase
+                try {
+                    const { error } = await supabase
+                        .from("users")
+                        .insert({
+                            "user_id": user_id,
+                            "email": email,
+                            "password": password,
+                            "role": "user",
+                            "status": "pending",
+                            "sub_status": "free",
+                        });
+                    if (error) {
+                        return NextResponse.json({ message: error }, { status: 500 });
+                    } else {
+                        return NextResponse.json({ message: "Account Created" }, { status: 201 });
+                    }
+                } catch (error) {
+                    return NextResponse.json({ message: error.message }, { status: 500 });
                 }
-            } catch (error) {
-                return NextResponse.json({ message: error.message }, { status: 500 });
             }
-        }
 
-        return await InsertUserDataIntoDb(signup_data.email, hash);
+            /*
+            async function SendVerificationMail(){
+            
+            
+            
+            }
+            */
+
+            return await InsertUserDataIntoDb(signup_data.email, hash);
+
+        }
     } else {
         // Return a 403 response if the bearer token does not match
         return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
