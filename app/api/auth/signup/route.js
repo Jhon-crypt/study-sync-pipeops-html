@@ -59,7 +59,7 @@ export async function POST(req) {
             const saltRounds = 10;
             const hash = bcrypt.hashSync(signup_data.password, saltRounds);
 
-            async function InsertUserDataIntoDb(email, password) {
+            async function InsertUserDataIntoDb(email, password, fullname, country, gender, institution, grade) {
                 // Generate user id
                 const user_id = uuidv4();
 
@@ -78,12 +78,33 @@ export async function POST(req) {
                     if (error) {
                         return NextResponse.json({ message: error }, { status: 500 });
                     } else {
+                        await InsertIntoUserProfileDb(user_id, fullname, country, gender, institution, grade)
                         await InsertConfirmationCodeToDb(user_id)
                         return NextResponse.json({ message: "Account Created" }, { status: 201 });
                     }
                 } catch (error) {
                     return NextResponse.json({ message: error.message }, { status: 500 });
                 }
+            }
+
+            async function InsertIntoUserProfileDb(user_id, fullname, country, gender, institution, grade) {
+
+                const { error } = await supabase
+                    .from("profile")
+                    .insert({
+                        "user_id": user_id,
+                        "fullname": fullname,
+                        "country": country,
+                        "gender": gender,
+                        "institution": institution,
+                        "grade_point": grade
+                    });
+                if(error){
+                    console.error('Error inserting user profile:', error);
+                }else{
+                    console.error('successfully inserted user profile'); 
+                }
+
             }
 
             async function InsertConfirmationCodeToDb(user_id) {
@@ -105,16 +126,16 @@ export async function POST(req) {
                         "status": "Active"
                     });
 
-                if(error){
+                if (error) {
                     console.error('Error inserting confirmation code:', error);
-                }else {
+                } else {
                     console.error('successfully inserted confirmation code');
 
                 }
 
             }
 
-            return await InsertUserDataIntoDb(signup_data.email, hash);
+            return await InsertUserDataIntoDb(signup_data.email, hash, signup_data.fullname, signup_data.country, signup_data.gender, signup_data.institution, signup_data.gradePoint);
 
         }
     } else {
