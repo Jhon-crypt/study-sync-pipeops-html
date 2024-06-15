@@ -9,6 +9,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 export async function POST(req) {
 
+    const cookieStore = cookies()
+
     // Retrieve the headers from the incoming request
     const headersInstance = headers();
 
@@ -27,82 +29,86 @@ export async function POST(req) {
 
         const json = await req.json();
 
-        // Ensure required fields exist in the JSON data
-        if (!json.email || !json.password) {
-            return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
-        }
-
-        const signin_data = {
-            email: json.email,
-            password: json.password,
-        };
-
-        // Checking if the user exists
-        const { data, error } = await supabase
-            .from('users')
-            .select('email, password, user_id')
-            .eq('email', signin_data.email)
-            .single();
-
-        if (error) {
-            return NextResponse.json({ message: 'User not found' }, { status: 404 });
+        if (cookieStore.has('sync-session') == true) {
+            return NextResponse.json({ message: "already logged in"}, { status: 200 });
         } else {
+            // Ensure required fields exist in the JSON data
+            if (!json.email || !json.password) {
+                return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+            }
 
-            const user = data;
+            const signin_data = {
+                email: json.email,
+                password: json.password,
+            };
 
-            if (bcrypt.compareSync(signin_data.password, user.password) == true) {
+            // Checking if the user exists
+            const { data, error } = await supabase
+                .from('users')
+                .select('email, password, user_id')
+                .eq('email', signin_data.email)
+                .single();
 
-                const session_id = uuidv4();
+            if (error) {
+                return NextResponse.json({ message: 'User not found' }, { status: 404 });
+            } else {
 
-                cookies().set('sync-session', session_id, {
-                    httpOnly: true,
-                    secure: false,
-                    maxAge: 60 * 60 * 24 * 7, // One week
-                    path: '/',
-                })
+                const user = data;
 
-                //check if user session exists
-                const { data, error } = await supabase
-                    .from('sessions')
-                    .select('user_id')
-                    .eq('user_id', user.user_id)
-                    .single();
+                if (bcrypt.compareSync(signin_data.password, user.password) == true) {
 
-                if (error) {
-                    //create new session
+                    const session_id = user.user_id;
 
-                    const { error } = await supabase
-                        .from("sessions")
-                        .insert({
-                            "session_id": session_id,
-                            "user_id": user.user_id,
-                            "status": "Active",
-                        });
-                    if (error) {
-                        return NextResponse.json({ message: error }, { status: 500 });
-                    } else {
-                        return NextResponse.json({ message: "successfully Logged in", data: {user_id : user.user_id} }, { status: 200 });
-                    }
-                } else {
-                    //update existing session
+                    cookies().set('sync-session', session_id, {
+                        httpOnly: true,
+                        secure: false,
+                        maxAge: 60 * 60 * 24 * 7, // One week
+                        path: '/',
+                    })
+
+                    //check if user session exists
                     const { data, error } = await supabase
                         .from('sessions')
-                        .update({ "session_id": session_id})
+                        .select('user_id')
                         .eq('user_id', user.user_id)
-                        .select()
+                        .single();
+
                     if (error) {
-                        return NextResponse.json({ message: error }, { status: 500 });
+                        //create new session
+
+                        const { error } = await supabase
+                            .from("sessions")
+                            .insert({
+                                "session_id": session_id,
+                                "user_id": user.user_id,
+                                "status": "Active",
+                            });
+                        if (error) {
+                            return NextResponse.json({ message: error }, { status: 500 });
+                        } else {
+                            return NextResponse.json({ message: "successfully Logged in", data: { user_id: user.user_id } }, { status: 200 });
+                        }
                     } else {
-                        return NextResponse.json({ message: "successfully Logged in", data: {user_id : user.user_id} }, { status: 200 });
+                        //update existing session
+                        const { data, error } = await supabase
+                            .from('sessions')
+                            .update({ "session_id": session_id })
+                            .eq('user_id', user.user_id)
+                            .select()
+                        if (error) {
+                            return NextResponse.json({ message: error }, { status: 500 });
+                        } else {
+                            return NextResponse.json({ message: "successfully Logged in", data: { user_id: user.user_id } }, { status: 200 });
+                        }
                     }
+
+                } else {
+                    return NextResponse.json({ message: "User Not Found" }, { status: 500 });
                 }
 
-            } else {
-                return NextResponse.json({ message: "User Not Found" }, { status: 500 });
             }
 
         }
-
 
         /*
         const base64Data = json.image; // Assuming the base64 image is in json.image
