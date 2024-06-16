@@ -58,7 +58,7 @@ export default function SetupForm() {
 
         try{
 
-            const BearerToken = process.env.NEXT_PUBLIC_MASTER_BEARER_KE;
+            const BearerToken = process.env.NEXT_PUBLIC_MASTER_BEARER_KEY;
 
             const response = await fetch('/api/auth/signup', {
                 method: 'POST',
