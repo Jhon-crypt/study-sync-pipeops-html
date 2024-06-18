@@ -123,7 +123,7 @@ export async function POST(req) {
                     .insert({
                         "user_id": user_id,
                         "code": randomCode,
-                        "status": "Active"
+                        "status": "active"
                     });
 
                 if (error) {

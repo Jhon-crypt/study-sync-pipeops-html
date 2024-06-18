@@ -17,7 +17,6 @@ export default function SignupForm() {
 
     const router = useRouter()
 
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
