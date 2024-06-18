@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 import { headers } from 'next/headers';
 import { cookies } from 'next/headers'
 import { v4 as uuidv4 } from 'uuid';
+import { writeFile } from 'fs/promises';
+import fs from 'fs';
 
 //import { writeFile } from 'fs/promises'; // Use promises for async/await
 import supabase from "@/app/config/supabase";
@@ -26,8 +28,6 @@ export async function POST(req) {
     if (bearer_token === process.env.MASTER_BEARER_KEY) {
 
         const json = await req.json();
-
-
 
         // Ensure required fields exist in the JSON data
         if (!json.userId || !json.courseTitle || !json.courseCode || !json.courseDescription || !json.courseImages) {
@@ -61,12 +61,80 @@ export async function POST(req) {
                 if (error) {
                     return NextResponse.json({ message: error }, { status: 500 });
                 } else {
+                    await UploadStudyImagesToServer(study_plan_data.course_images, plan_id)
+                    await UploadStudyImagesToSupabase(study_plan_data.course_images, plan_id)
                     return NextResponse.json({ message: "Study plan Created" }, { status: 200 });
                 }
 
             } catch (error) {
 
                 return NextResponse.json({ message: error.message }, { status: 500 });
+
+            }
+
+        }
+
+        async function dataURLToBlob(dataURL) {
+            const response = await fetch(dataURL);
+            const blob = await response.blob();
+            return blob;
+        }
+
+        async function UploadStudyImagesToServer(images, plan_id) {
+
+            try {
+                const promises = images.map(async (base64Data, index) => {
+                    const base64String = base64Data.replace(/^data:image\/\w+;base64,/, "");
+                    const buffer = Buffer.from(base64String, 'base64');
+                    const filePath = `./public/${plan_id}_${index}.png`; // Adjust the path as needed
+                    await writeFile(filePath, buffer);
+                    await deleteFile(filePath);
+                });
+
+                await Promise.all(promises);
+                // Delete the file after AI processing is completed
+                
+                return NextResponse.json({ message: "Images uploaded successfully" }, { status: 200 });
+            } catch (error) {
+                return NextResponse.json({ message: "could not upload image" }, { status: 500 });
+            }
+
+        }
+
+        async function deleteFile(filePath) {
+            return new Promise((resolve, reject) => {
+                fs.unlink(filePath, (err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            });
+        }
+
+        async function UploadStudyImagesToSupabase(images, plan_id) {
+
+            try {
+                for (let i = 0; i < images.length; i++) {
+                    const image = images[i];
+                    const blob = await dataURLToBlob(image);
+                    const { data, error } = await supabase.storage
+                        .from('study-plans')
+                        .upload(`${plan_id}/${uuidv4()}`, blob, {
+                            cacheControl: '3600',
+                            upsert: false,
+                        });
+
+                    if (error) {
+                        console.log(error)
+                    }
+                }
+                return NextResponse.json({ message: "Images uploaded to supabase" }, { status: 200 });
+
+            } catch (error) {
+
+                return NextResponse.json({ message: "Could not upload images to supabase" }, { status: 500 });
 
             }
 

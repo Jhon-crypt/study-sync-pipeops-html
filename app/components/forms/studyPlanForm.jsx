@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from 'next/navigation'
 import Link from "next/link";
 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 export default function StudyPlanForm() {
 
@@ -19,6 +19,8 @@ export default function StudyPlanForm() {
         courseDescription: '',
         courseImages: [] // Updated to handle multiple images
     });
+
+    const fileInputRef = useRef(null); // Reference for file input
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -68,6 +70,9 @@ export default function StudyPlanForm() {
                 courseImages: updatedImages
             };
         });
+
+        // Reset the file input field
+        fileInputRef.current.value = null;
     };
 
     const handleSubmit = async (e) => {
@@ -141,7 +146,7 @@ export default function StudyPlanForm() {
 
                 <div className="mb-4">
                     <label className="form-label" style={{ fontSize: "16px", fontFamily: "Fredoka, sans-serif", fontWeight: '500' }}>Upload Your Notes</label>
-                    <input className="form-control" type="file" id="formFileMultiple" multiple style={{ height: "44px", backgroundColor: "#F7F2F6", borderRadius: "10px" }} accept="image/*" onChange={handleImageChange} />
+                    <input ref={fileInputRef} className="form-control" type="file" id="formFileMultiple" multiple style={{ height: "44px", backgroundColor: "#F7F2F6", borderRadius: "10px" }} accept="image/*" onChange={handleImageChange} />
                 </div>
                 <div>
                     {formData.courseImages.map((image, index) => (
