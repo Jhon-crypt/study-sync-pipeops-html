@@ -8,6 +8,7 @@ import supabase from "@/app/config/supabase";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import fs from 'fs';
 
+
 export async function POST(req) {
 
 
@@ -64,8 +65,9 @@ export async function POST(req) {
                 } else {
                     await UploadStudyImagesToServer(study_plan_data.course_images, plan_id)
                     await UploadStudyImagesToSupabase(study_plan_data.course_images, plan_id)
-                    const aiResponse = await GoogleAi(plan_id, study_plan_data.course_images);
-                    return NextResponse.json({ message: "Study plan Created", aiResponse }, { status: 200 });
+                    const modules = await GoogleAi(plan_id, study_plan_data.course_images);
+                    await CreateStudyModules(plan_id, modules);
+                    return NextResponse.json({ message: "Study plan Created", modules }, { status: 200 });
                 }
 
             } catch (error) {
@@ -90,7 +92,7 @@ export async function POST(req) {
                     const buffer = Buffer.from(base64String, 'base64');
                     const filePath = `./public/${plan_id}_${index}.png`; // Adjust the path as needed
                     await writeFile(filePath, buffer);
-                   
+
                 });
 
                 await Promise.all(promises);
@@ -144,8 +146,8 @@ export async function POST(req) {
 
         async function GoogleAi(plan_id, images) {
             const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-            const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
-            const prompt = `I want you to simplify the note as simple as possible in the image to well structured json,there should be no breaks,no slashes in between the key and its values i don want there to be spaces in between the json data with exaclty this structure, nothing else, i repeat, nothing else apart from ths structure{topic: "",note: ""}, the topics should be at list 10, repeated jsons, just that, and spaced too, nothing else extra, the note in the json should be extensive and detailed and understandable by anybody`;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro", systemInstruction: `always return in json format like this {"modules": [{topic: "",note: ""}]}`, });
+            const prompt = `I want you to simplify the note as simple as possible in the images, whether its one or two to well structured json,there should be no breaks,no slashes in between the key and its values i don want there to be spaces in between the json data with exaclty this structure, nothing else, i repeat, nothing else apart from ths structure{"modules": [{topic: "",note: ""}]}, the topics should be at list 10, repeated jsons, just that, and spaced too, nothing else extra, the note in the json should be extensive and detailed and understandable by anybody`;
 
             function fileToGenerativePart(path, mimeType) {
                 return {
@@ -172,10 +174,43 @@ export async function POST(req) {
 
                 await Promise.all(deletePromises);
 
-                return generatedContent.response.text();
+                const generatedText = generatedContent.response.text();
+
+                const modulesData = JSON.parse(generatedText);
+                const modules = modulesData.modules; // Ensure we access the 'modules' property
+
+                return modules;
             } catch (error) {
                 return { message: "Could not process images with Google AI" };
+                console.log(error)
             }
+        }
+
+        async function CreateStudyModules(plan_id, modules) {
+
+            try {
+
+                const promises = modules.map(async (module, index) => {
+                    const { topic, note } = module; // Destructure topic and note from each module object
+
+                    const { error } = await supabase
+                        .from("study_plan_modules")
+                        .insert({
+                            "plan_id": plan_id,
+                            "module_id": uuidv4(),
+                            "module_title": topic,
+                            "note": note
+                        });
+                    if (error) {
+                        console.log(error)
+                    }
+                });
+                await Promise.all(promises);
+
+            } catch (error) {
+                console.log(error)
+            }
+
         }
 
         return await CreateStudyPlan(study_plan_data.user_id, plan_id, study_plan_data.course_title, study_plan_data.course_code, study_plan_data.course_description, study_plan_data.course_images);
