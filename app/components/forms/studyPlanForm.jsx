@@ -83,46 +83,39 @@ export default function StudyPlanForm() {
             data.append(`courseImage${index}`, image);
         });
         console.log(formData)
-    }
 
-    //const [images, setImages] = useState([]);
+        const payload = {
+            courseTitle: formData.courseTitle,
+            courseCode: formData.courseCode,
+            courseDescription: formData.courseDescription,
+            courseImages: formData.courseImages
+        }
 
-    /*
-    const handleImageChange = (e) => {
-        const files = Array.from(e.target.files);
+        const BearerToken = process.env.NEXT_PUBLIC_MASTER_BEARER_KEY;
 
-        Promise.all(files.map(fileToDataURL))
-            .then((previews) => {
-                setImages(previews);
-            })
-            .catch((error) => {
-                console.error('Error reading files:', error);
-                setImages([]);
-            });
-    };
-
-    const fileToDataURL = (file) => {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-
-            reader.onload = () => {
-                resolve(reader.result);
-            };
-
-            reader.onerror = () => {
-                reject(reader.error);
-            };
-
-            reader.readAsDataURL(file);
+        const response = await fetch('/api/studyplans/create', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${BearerToken}`
+            },
+            body: JSON.stringify(payload)
         });
-    };
+        const data_response = await response.json();
+        if (!response.ok) {
 
-    const handleDelete = (index) => {
-        const updatedImages = [...images];
-        updatedImages.splice(index, 1);
-        setImages(updatedImages);
-    };
-    */
+            toast.error("Could not create", {
+                position: "top-right"
+            });
+            setLoading(false)
+        } else {
+            toast.success("Study plan created", {
+                position: "top-right"
+            });
+            setLoading(false)
+            console.log(data)
+        }
+    }
 
 
     return (

@@ -37,7 +37,7 @@ export default function LoginForm() {
             email: formData.email,
             password: formData.password
         }
-        console.log(payload)
+        //console.log(payload)
         const BearerToken = process.env.NEXT_PUBLIC_MASTER_BEARER_KEY;
 
         const response = await fetch('/api/auth/signin', {
