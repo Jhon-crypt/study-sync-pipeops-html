@@ -46,7 +46,7 @@ export default function SignupForm() {
             if (storedData) {
                 localStorage.removeItem('formData');
                 localStorage.setItem('formData', JSON.stringify(formData));
-                router.push('/setup')
+                router.push('/signin')
                 setLoading(false)
                 
             } else {

@@ -30,7 +30,7 @@ export async function POST(req) {
         const json = await req.json();
 
         if (cookieStore.has('sync-session') == true) {
-            return NextResponse.json({ message: "already logged in"}, { status: 200 });
+            return NextResponse.json({ message: "already logged in" }, { status: 200 });
         } else {
             // Ensure required fields exist in the JSON data
             if (!json.email || !json.password) {
@@ -98,8 +98,24 @@ export async function POST(req) {
                         if (error) {
                             return NextResponse.json({ message: error }, { status: 500 });
                         } else {
+                            await UpdateUserStatus(user.user_id)
                             return NextResponse.json({ message: "successfully Logged in", data: { user_id: user.user_id } }, { status: 200 });
                         }
+                    }
+
+                    async function UpdateUserStatus(user_id) {
+
+                        const { data, error } = await supabase
+                            .from('users')
+                            .update({ "status": "online" })
+                            .eq('user_id', user_id)
+                            .select()
+                        if (error) {
+                            console.log("User status updated")
+                        } else {
+                            console.log("Could not update user status")
+                        }
+
                     }
 
                 } else {

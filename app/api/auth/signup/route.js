@@ -3,6 +3,8 @@ import { headers } from 'next/headers';
 import bcrypt from "bcrypt";
 import supabase from "@/app/config/supabase";
 import { v4 as uuidv4 } from 'uuid';
+import { Resend } from 'resend';
+
 
 export async function POST(req) {
 
@@ -79,7 +81,8 @@ export async function POST(req) {
                         return NextResponse.json({ message: error }, { status: 500 });
                     } else {
                         await InsertIntoUserProfileDb(user_id, fullname, country, gender, institution, grade)
-                        await InsertConfirmationCodeToDb(user_id)
+                        //await InsertConfirmationCodeToDb(user_id)
+                        //await SendConfirmationEmail(user_id, email)
                         return NextResponse.json({ message: "Account Created" }, { status: 201 });
                     }
                 } catch (error) {
@@ -87,27 +90,8 @@ export async function POST(req) {
                 }
             }
 
-            async function InsertIntoUserProfileDb(user_id, fullname, country, gender, institution, grade) {
-
-                const { error } = await supabase
-                    .from("profile")
-                    .insert({
-                        "user_id": user_id,
-                        "fullname": fullname,
-                        "country": country,
-                        "gender": gender,
-                        "institution": institution,
-                        "grade_point": grade
-                    });
-                if(error){
-                    console.error('Error inserting user profile:', error);
-                }else{
-                    console.error('successfully inserted user profile'); 
-                }
-
-            }
-
-            async function InsertConfirmationCodeToDb(user_id) {
+            {/*]
+            async function SendConfirmationEmail(user_id, email) {
 
                 function generateRandomCode() {
                     const min = 1000;
@@ -117,6 +101,30 @@ export async function POST(req) {
                 }
 
                 const randomCode = generateRandomCode();
+
+                const resend = new Resend(process.env.RESEND_API_KEY);
+
+                const { data, error } = await resend.emails.send({
+                    from: 'Study Sync <onboarding@resend.dev>',
+                    to: [`${email}`],
+                    subject: `<h1>Testing, this is your code ${randomCode}</h1>`,
+                    html: '<strong>It works!</strong>',
+                });
+
+                if (error) {
+                    return console.error({ error });
+                } else {
+                    await InsertConfirmationCodeToDb(user_id, randomCode)
+                    console.log({ data });
+                }
+
+            }
+            {*/}
+
+            {/*}
+            async function InsertConfirmationCodeToDb(user_id, randomCode) {
+
+
 
                 const { error } = await supabase
                     .from("confirmation_code")
@@ -131,6 +139,27 @@ export async function POST(req) {
                 } else {
                     console.error('successfully inserted confirmation code');
 
+                }
+
+            }
+            {*/}
+
+            async function InsertIntoUserProfileDb(user_id, fullname, country, gender, institution, grade) {
+
+                const { error } = await supabase
+                    .from("profile")
+                    .insert({
+                        "user_id": user_id,
+                        "fullname": fullname,
+                        "country": country,
+                        "gender": gender,
+                        "institution": institution,
+                        "grade_point": grade
+                    });
+                if (error) {
+                    console.error('Error inserting user profile:', error);
+                } else {
+                    console.error('successfully inserted user profile');
                 }
 
             }

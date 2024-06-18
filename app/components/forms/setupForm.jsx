@@ -73,6 +73,7 @@ export default function SetupForm() {
                 toast.success("Sign up successful", {
                     position: "top-right"
                 });
+                router.push('/setup/confirm-mail');
                 setLoading(false)
                 console.log(data)
             }
