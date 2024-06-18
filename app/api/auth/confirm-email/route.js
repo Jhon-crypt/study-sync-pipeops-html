@@ -35,20 +35,42 @@ export async function POST(req) {
             code: json.code
         }
 
-        const { data, error } = await supabase
+        //checking if the confirmation code has been used
+        const { data } = await supabase
             .from('confirmation_code')
-            .update({ status: 'expired' })
+            .select('*')
             .eq('code', confirm_email_data.code)
-            .select()
-        if (error) {
-            return NextResponse.json({ message: "Error, try again" }, { status: 500 });
-        } else {
-            if (Array.isArray(data) && data.length === 0) {
-                return NextResponse.json({ message: "Wrong confirmation code" }, { status: 404 });
+            .single();
+
+        if (data) {
+
+            if (data.status === "expired") {
+                return NextResponse.json({ message: "Code has been used" }, { status: 404 });
             } else {
-                return NextResponse.json({ message: "Email confirmed" }, { status: 200 });
+                const { data, error } = await supabase
+                    .from('confirmation_code')
+                    .update({ status: 'expired' })
+                    .eq('code', confirm_email_data.code)
+                    .select()
+                if (error) {
+                    return NextResponse.json({ message: "Error, try again" }, { status: 500 });
+                } else {
+                    if (Array.isArray(data) && data.length === 0) {
+                        return NextResponse.json({ message: "Wrong confirmation code" }, { status: 404 });
+                    } else {
+                        return NextResponse.json({ message: "Email confirmed" }, { status: 200 });
+                    }
+                }
             }
+
+            /*
+           
+            */
+        } else {
+            return NextResponse.json({ message: "Wrong confirmation code" }, { status: 500 });
         }
+
+
 
     }
 
