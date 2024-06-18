@@ -3,7 +3,7 @@ import { headers } from 'next/headers';
 import bcrypt from "bcrypt";
 import supabase from "@/app/config/supabase";
 import { v4 as uuidv4 } from 'uuid';
-import { Resend } from 'resend';
+//import { Resend } from 'resend';
 
 
 export async function POST(req) {

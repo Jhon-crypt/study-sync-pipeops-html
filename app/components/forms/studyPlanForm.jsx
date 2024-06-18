@@ -85,6 +85,7 @@ export default function StudyPlanForm() {
         console.log(formData)
 
         const payload = {
+            userId: localStorage.getItem('study-userId'),
             courseTitle: formData.courseTitle,
             courseCode: formData.courseCode,
             courseDescription: formData.courseDescription,

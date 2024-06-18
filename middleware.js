@@ -1,7 +1,6 @@
+'use server'
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
-
 
 export function middleware(request) {
 
@@ -12,7 +11,7 @@ export function middleware(request) {
             return NextResponse.redirect(new URL('/signin', request.url))
         }
     }
-    if (request.nextUrl.pathname.startsWith('/study-plan')) {
+    if (request.nextUrl.pathname.startsWith('/study-plan/create')) {
         if (cookieStore.has('sync-session') == false) {
             return NextResponse.redirect(new URL('/signin', request.url))
         }

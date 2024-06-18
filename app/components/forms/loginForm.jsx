@@ -48,7 +48,7 @@ export default function LoginForm() {
             },
             body: JSON.stringify(payload)
         });
-        const data = await response.json();
+       
         if (!response.ok) {
 
             toast.error("Wrong email or password", {
@@ -56,12 +56,16 @@ export default function LoginForm() {
             });
             setLoading(false)
         } else {
+            const data = await response.json();
+            router.push('/dashboard');
             toast.success("Login successful", {
                 position: "top-right"
             });
-            router.push('/dashboard');
+            const user_id = data.data.user_id
+            localStorage.setItem('study-userId', user_id);
             setLoading(false)
-            console.log(data)
+            //const accessToken = localStorage.getItem('accessToken');
+            //console.log(parsed_data)
         }
 
     }
