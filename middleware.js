@@ -17,5 +17,5 @@ export function middleware(request) {
             return NextResponse.redirect(new URL('/signin', request.url))
         }
     }
-    //study-plan/create
+    
 }
