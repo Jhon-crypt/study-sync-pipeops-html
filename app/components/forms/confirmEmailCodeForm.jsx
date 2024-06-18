@@ -2,8 +2,12 @@
 import { useState } from "react"
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from 'next/navigation'
+
 
 export default function ConfirmationCodeForm() {
+
+    const router = useRouter()
 
     const [loading, setLoading] = useState(false)
 
@@ -25,49 +29,44 @@ export default function ConfirmationCodeForm() {
         setLoading(true)
         e.preventDefault();
 
-        const data = new FormData();
-        data.append('code', formData.code);
+        const form = new FormData();
+        form.append('code', formData.code);
         console.log(formData)
 
         const payload = {
             code: formData.code
         }
 
-        try {
+        const BearerToken = process.env.NEXT_PUBLIC_MASTER_BEARER_KEY;
 
-            const BearerToken = process.env.NEXT_PUBLIC_MASTER_BEARER_KEY;
+        const response = await fetch('/api/auth/confirm-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${BearerToken}`
+            },
+            body: JSON.stringify(payload)
+        });
+        const data = await response.json();
 
-            const response = await fetch('/api/auth/confirm-email', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${BearerToken}`
-                },
-                body: JSON.stringify(payload)
-            });
-            const data = await response.json();
-            if (!response.ok) {
-                console.log(error)
-                toast.error("Wrong confirmation code", {
-                    position: "top-right"
-                });
-                setLoading(false)
-            } else {
-                const data = await response.json();
-                toast.success("Email confirmed, wait while we redirect you...", {
-                    position: "top-right"
-                });
-                setLoading(false)
-                console.log(data)
-            }
-
-        } catch (error) {
+        if (!response.ok) {
             toast.error("Wrong confirmation code", {
                 position: "top-right"
             });
             setLoading(false)
+        } else {
+            toast.success("Email confirmed, wait while we redirect you...", {
+                position: "top-right"
+            });
 
+            router.push('/signin');
+
+
+            setLoading(false)
+            console.log(data)
         }
+
+
     }
 
     return (
