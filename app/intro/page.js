@@ -43,7 +43,7 @@ export default function Page() {
                             </div>
                             <Desktop>
                                 <div>
-                                    <button className="btn me-2" style={{ border: "1px solid #B670E3", fontFamily: "Fredoka, sans-serif" }}>Sign In</button>
+                                    <button className="btn mb-3" style={{ border: "1px solid #B670E3", fontFamily: "Fredoka, sans-serif" }}>Sign In</button>
                                     <button className="btn text-white" style={{ background: "linear-gradient(to right, #B670E3, #E864DB)", fontFamily: "Fredoka, sans-serif" }}>Sign up</button>
                                 </div>
                             </Desktop>
