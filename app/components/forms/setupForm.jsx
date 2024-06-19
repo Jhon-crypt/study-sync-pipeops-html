@@ -3,6 +3,7 @@ import { useState } from "react"
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from 'next/navigation'
+import Link from "next/link";
 
 export default function SetupForm() {
 
@@ -50,7 +51,7 @@ export default function SetupForm() {
 
         console.log(payload)
 
-        try{
+        try {
 
             const BearerToken = process.env.NEXT_PUBLIC_MASTER_BEARER_KEY;
 
@@ -78,7 +79,7 @@ export default function SetupForm() {
                 console.log(data)
             }
 
-        }catch(error){
+        } catch (error) {
             setLoading(false)
             toast.error("Email already exists", {
                 position: "top-right"
@@ -150,6 +151,12 @@ export default function SetupForm() {
                     </select>
                 </div>
 
+                <Link href="/dashboard" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }}>
+                    Sign Up
+                </Link>
+            </form>
+            <ToastContainer />
+            {/*}
                 <div className="mt-5 mb-3 d-grid">
                     {loading ? (
                         <>
@@ -164,9 +171,9 @@ export default function SetupForm() {
                             </button>
                         </>
                     )}
+                    
                 </div>
-            </form>
-            <ToastContainer />
+                {*/}
         </>
 
     )
