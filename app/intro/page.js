@@ -8,16 +8,18 @@ export default function Page() {
 
             <div>
                 <div className="container-fluid text-center">
-
-                    <div className="row justify-content-between align-items-center my-4">
-                        <div className="col-auto">
-                            <img src="/logo2.png" alt="StudySync Logo" className="img-fluid" width={160} />
+                    <nav class="navbar bg-body-tertiary">
+                        <div class="container-fluid">
+                            <a class="navbar-brand" href="#">
+                                <img src="/logo2.png" alt="StudySync Logo" className="img-fluid" width={160} />
+                            </a>
+                            <div>
+                                <button className="btn me-2" style={{ border: "1px solid #B670E3", fontFamily: "Fredoka, sans-serif" }}>Sign In</button>
+                                <button className="btn text-white" style={{ background: "linear-gradient(to right, #B670E3, #E864DB)", fontFamily: "Fredoka, sans-serif" }}>Sign up</button>
+                            </div>
                         </div>
-                        <div className="col-auto">
-                            <button className="btn me-2" style={{ border: "1px solid #B670E3", fontFamily: "Fredoka, sans-serif" }}>Sign In</button>
-                            <button className="btn text-white" style={{ background: "linear-gradient(to right, #B670E3, #E864DB)", fontFamily: "Fredoka, sans-serif" }}>Sign up</button>
-                        </div>
-                    </div>
+                    </nav>
+                   
                     <br />
                     <div className="row align-items-center">
                         <div className="col-md-6 text-md-start text-center">
