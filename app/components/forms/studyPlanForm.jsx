@@ -4,6 +4,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from 'next/navigation'
 import { useState, useRef } from 'react';
+import Link from "next/link";
 
 export default function StudyPlanForm() {
 
@@ -105,7 +106,7 @@ export default function StudyPlanForm() {
             },
             body: JSON.stringify(payload)
         });
-        
+
         if (!response.ok) {
 
             toast.error("Could not create", {
@@ -115,12 +116,12 @@ export default function StudyPlanForm() {
         } else {
             const data_response = await response.json();
             const { plan_id } = data_response;
-            router.push(`/study-plan/modules/${plan_id}`);
             toast.success("Study plan created", {
                 position: "top-right"
             });
+            router.push(`/study-plan/modules/${plan_id}`);
             setLoading(false)
-            
+
         }
     }
 
@@ -161,6 +162,13 @@ export default function StudyPlanForm() {
                 </div>
 
                 <div className="mt-5 mb-3 d-grid">
+                    <Link href="/study-plan" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }}>
+                        Create
+                    </Link>
+                </div>
+
+                {/*}
+                <div className="mt-5 mb-3 d-grid">
                     {loading ? (
                         <>
                             <button disabled type="submit" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }}>
@@ -178,6 +186,8 @@ export default function StudyPlanForm() {
                     }
 
                 </div>
+                {*/}
+
             </form>
             {/*}
             <div>

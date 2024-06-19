@@ -64,7 +64,7 @@ export default function LoginForm() {
             const user_id = data.data.user_id
             localStorage.setItem('study-userId', user_id);
             setLoading(false)
-            //const accessToken = localStorage.getItem('accessToken');
+            //        const accessToken = localStorage.getItem('accessToken');
             //console.log(parsed_data)
         }
 

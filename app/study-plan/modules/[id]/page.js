@@ -9,7 +9,7 @@ export default function Modules({ params }) {
 
             <Header title="Modules" icon="bi-chevron-left" route="/study-plan" />
 
-            <ModulesSection plan_id={`${params.id}`}/>
+            <ModulesSection />
         </>
 
     )
