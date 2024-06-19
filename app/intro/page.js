@@ -14,8 +14,8 @@ export default function Page() {
                             <img src="/logo2.png" alt="StudySync Logo" className="img-fluid" width={160} />
                         </div>
                         <div className="col-auto">
-                            <button className="btn me-2 px-4" style={{ border: "1px solid #B670E3", fontFamily: "Fredoka, sans-serif" }}>Sign In</button>
-                            <button className="btn text-white px-4" style={{ background: "linear-gradient(to right, #B670E3, #E864DB)", fontFamily: "Fredoka, sans-serif" }}>Sign up</button>
+                            <button className="btn me-2" style={{ border: "1px solid #B670E3", fontFamily: "Fredoka, sans-serif" }}>Sign In</button>
+                            <button className="btn text-white" style={{ background: "linear-gradient(to right, #B670E3, #E864DB)", fontFamily: "Fredoka, sans-serif" }}>Sign up</button>
                         </div>
                     </div>
                     <br />
