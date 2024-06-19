@@ -3,8 +3,6 @@ import { FaRegTrashCan } from "react-icons/fa6";
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from 'next/navigation'
-import Link from "next/link";
-
 import { useState, useRef } from 'react';
 
 export default function StudyPlanForm() {
@@ -107,7 +105,7 @@ export default function StudyPlanForm() {
             },
             body: JSON.stringify(payload)
         });
-        const data_response = await response.json();
+        
         if (!response.ok) {
 
             toast.error("Could not create", {
@@ -115,11 +113,14 @@ export default function StudyPlanForm() {
             });
             setLoading(false)
         } else {
+            const data_response = await response.json();
+            const { plan_id } = data_response;
+            router.push(`/study-plan/modules/${plan_id}`);
             toast.success("Study plan created", {
                 position: "top-right"
             });
             setLoading(false)
-            console.log(data)
+            
         }
     }
 

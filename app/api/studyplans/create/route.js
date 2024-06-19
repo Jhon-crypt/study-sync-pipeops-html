@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { headers } from 'next/headers';
-import { cookies } from 'next/headers'
 import { v4 as uuidv4 } from 'uuid';
 import { writeFile } from 'fs/promises';
 //import { writeFile } from 'fs/promises'; // Use promises for async/await
@@ -11,8 +10,6 @@ import fs from 'fs';
 
 export async function POST(req) {
 
-
-    const cookieStore = cookies()
 
     // Retrieve the headers from the incoming request
     const headersInstance = headers();
@@ -66,8 +63,8 @@ export async function POST(req) {
                     await UploadStudyImagesToServer(study_plan_data.course_images, plan_id)
                     await UploadStudyImagesToSupabase(study_plan_data.course_images, plan_id)
                     const modules = await GoogleAi(plan_id, study_plan_data.course_images);
-                    await CreateStudyModules(plan_id, modules);
-                    return NextResponse.json({ message: "Study plan Created", modules }, { status: 200 });
+                    await CreateStudyModules(plan_id, modules, { generationConfig: { response_mime_type: "application/json" } });
+                    return NextResponse.json({ message: "Study plan Created", plan_id }, { status: 200 });
                 }
 
             } catch (error) {
@@ -144,11 +141,10 @@ export async function POST(req) {
 
         }
 
-        async function GoogleAi(plan_id, images) {
+        async function GoogleAi(plan_id, images, options = {}) {
             const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-            const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro", systemInstruction: `always return in json format like this {"modules": [{topic: "",note: ""}]}`, });
-            const prompt = `I want you to simplify the note as simple as possible in the images, whether its one or two to well structured json,there should be no breaks,no slashes in between the key and its values i don want there to be spaces in between the json data with exaclty this structure, nothing else, i repeat, nothing else apart from ths structure{"modules": [{topic: "",note: ""}]}, the topics should be at list 10, repeated jsons, just that, and spaced too, nothing else extra, the note in the json should be extensive and detailed and understandable by anybody`;
-
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro", ...options });
+            const prompt = `Based on this schema{"modules": [{topic: "",note: ""}]} give a simple to read data based on the images`
             function fileToGenerativePart(path, mimeType) {
                 return {
                     inlineData: {
@@ -164,8 +160,8 @@ export async function POST(req) {
                     return fileToGenerativePart(filePath, "image/png");
                 });
 
-                const generatedContent = await model.generateContent([prompt, ...parts]);
-                console.log(generatedContent.response.text());
+                const generatedContent = await model.generateContentStream([prompt, ...parts]);
+                //console.log(generatedContent);
 
                 const deletePromises = images.map((_, index) => {
                     const filePath = `./public/${plan_id}_${index}.png`;
@@ -174,15 +170,29 @@ export async function POST(req) {
 
                 await Promise.all(deletePromises);
 
-                const generatedText = generatedContent.response.text();
+                let text = '';
+                for await (const chunk of generatedContent.stream) {
+                    const chunkText = chunk.text();
+                    console.log(chunkText);
+                    text += chunkText;
+                }
+                console.log("stream", text)
 
-                const modulesData = JSON.parse(generatedText);
-                const modules = modulesData.modules; // Ensure we access the 'modules' property
+                // Remove leading and trailing ```json
+                const cleanedText = text.replace(/^```json\s*|\s*```$/g, '');
+
+                console.log("Generated Text from Google AI:", cleanedText); // Add this line for debugging
+                const modulesData = JSON.parse(cleanedText);
+                let modules = Array.isArray(modulesData.modules) ? modulesData.modules : []; // Ensure 'modules' is an array
+
+                // Filter out modules with empty notes
+                modules = modules.filter(module => module.note && module.note.trim() !== "");
 
                 return modules;
             } catch (error) {
-                return { message: "Could not process images with Google AI" };
-                console.log(error)
+                //return { message: "Could not process images with Google AI" };
+                return NextResponse.json({ message: "Could not process images with Google AI" }, { status: 500 });
+
             }
         }
 
@@ -203,6 +213,8 @@ export async function POST(req) {
                         });
                     if (error) {
                         console.log(error)
+                    } else {
+
                     }
                 });
                 await Promise.all(promises);

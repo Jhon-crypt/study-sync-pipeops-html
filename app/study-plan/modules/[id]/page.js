@@ -1,7 +1,7 @@
 import Header from "@/app/components/header/header"
 import ModulesSection from "@/app/components/section/modulesSection"
 
-export default function Modules() {
+export default function Modules({ params }) {
 
     return (
 
@@ -9,7 +9,7 @@ export default function Modules() {
 
             <Header title="Modules" icon="bi-chevron-left" route="/study-plan" />
 
-            <ModulesSection />
+            <ModulesSection plan_id={`${params.id}`}/>
         </>
 
     )

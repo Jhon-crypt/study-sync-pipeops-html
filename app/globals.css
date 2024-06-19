@@ -47,3 +47,11 @@ select option:selected{
   left: 50%; /* Aligns the left of the modal to the middle */
   transform: translate(-50%, -50%); 
 }
+
+.module-link{
+  font-size: 14px
+}
+
+.module-link:hover{
+  font-size: 30px
+}
