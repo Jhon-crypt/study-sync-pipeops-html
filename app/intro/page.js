@@ -11,7 +11,7 @@ export default function Page() {
 
                     <div className="row justify-content-between align-items-center my-4">
                         <div className="col-auto">
-                            <img src="/logo2.png" alt="StudySync Logo" className="img-fluid" width={200} />
+                            <img src="/logo2.png" alt="StudySync Logo" className="img-fluid" width={160} />
                         </div>
                         <div className="col-auto">
                             <button className="btn me-2 px-4" style={{ border: "1px solid #B670E3", fontFamily: "Fredoka, sans-serif" }}>Sign In</button>

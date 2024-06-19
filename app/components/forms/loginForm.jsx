@@ -3,7 +3,7 @@ import { useState } from "react"
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from 'next/navigation'
-
+import Link from "next/link";
 
 export default function LoginForm() {
 
@@ -48,7 +48,7 @@ export default function LoginForm() {
             },
             body: JSON.stringify(payload)
         });
-       
+
         if (!response.ok) {
 
             toast.error("Wrong email or password", {
@@ -85,7 +85,16 @@ export default function LoginForm() {
                     <input name="password" value={formData.password} onChange={handleChange} type="password" placeholder="Password" class="form-control" style={{ backgroundColor: "#F7F2F6", height: "44px", borderRadius: "10px" }} required />
                 </div>
 
-                <div className="mt-5 mb-3 d-grid">
+
+                <Link type="submit" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }}>
+                    Login
+                </Link>
+            </form>
+
+            <ToastContainer />
+
+            {/*}
+<div className="mt-5 mb-3 d-grid">
                     {loading ? (
                         <>
                             <button disabled type="submit" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }}>
@@ -101,10 +110,7 @@ export default function LoginForm() {
                     )}
 
                 </div>
-
-            </form>
-
-            <ToastContainer />
+            {*/}
 
         </>
 
