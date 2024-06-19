@@ -86,7 +86,7 @@ export default function LoginForm() {
                 </div>
 
 
-                <Link type="submit" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }}>
+                <Link href="/dashboard" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }}>
                     Login
                 </Link>
             </form>
