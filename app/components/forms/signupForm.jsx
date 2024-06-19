@@ -3,6 +3,7 @@ import { useState } from "react"
 import { toast, ToastContainer } from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
 import { useRouter } from 'next/navigation'
+import Link from "next/link";
 
 export default function SignupForm() {
 
@@ -23,7 +24,7 @@ export default function SignupForm() {
             ...prevData,
             [name]: value,
         }));
-        
+
     };
 
     const handleSubmit = async (e) => {
@@ -48,7 +49,7 @@ export default function SignupForm() {
                 localStorage.setItem('formData', JSON.stringify(formData));
                 router.push('/signin')
                 setLoading(false)
-                
+
             } else {
                 localStorage.setItem('formData', JSON.stringify(formData));
                 toast.success("Form Saved", {
@@ -56,7 +57,7 @@ export default function SignupForm() {
                 });
                 setLoading(false)
                 router.push('/setup')
-               
+
 
             }
         }
@@ -98,6 +99,10 @@ export default function SignupForm() {
                 </div>
 
                 <div className="mt-5 mb-3 d-grid">
+                    <Link href="/setup" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }}>
+                        Next
+                    </Link>
+                    {/*}
                     {loading ? (
                         <>
                             <button disabled type="submit" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }}>
@@ -113,6 +118,7 @@ export default function SignupForm() {
                             </>
                         )
                     }
+                    {*/}
 
                 </div>
             </form>

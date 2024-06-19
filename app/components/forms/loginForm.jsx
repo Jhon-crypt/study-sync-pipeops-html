@@ -85,10 +85,11 @@ export default function LoginForm() {
                     <input name="password" value={formData.password} onChange={handleChange} type="password" placeholder="Password" class="form-control" style={{ backgroundColor: "#F7F2F6", height: "44px", borderRadius: "10px" }} required />
                 </div>
 
-
-                <Link href="/dashboard" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }}>
-                    Login
-                </Link>
+                <div className="mt-5 mb-3 d-grid">
+                    <Link href="/dashboard" className="btn btn-block border-0 text-white px-5 py-2" style={{ fontFamily: "Fredoka, sans-serif", background: "linear-gradient(to right, #D95388, #85486e)" }}>
+                        Login
+                    </Link>
+                </div>
             </form>
 
             <ToastContainer />
